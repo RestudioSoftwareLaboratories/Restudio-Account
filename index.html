@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTUDIO - ACCOUNT & AVATAR (SECURE)</title>
+    
+<!-- ========= Additional Security Programs ========== -->
+
+<!-- 1. Prevent page loading within iframe (Clickjacking Protection) -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <!-- 2. Prevent the browser from guessing the MIME type (prevents the execution of malicious files) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+   <!-- 3. Restricting access to dangerous features -->
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=()">
+    
+ <!-- 4. Content Security Policy (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;
+        style-src 'self' 'unsafe-inline' https:;
+        font-src 'self' https: data:;
+        img-src 'self' data: https: blob:;
+        connect-src 'self';
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+    ">
+    
+    <link rel="icon" href="https://i.postimg.cc/66MLbbg8/restudio-profile.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url('https://i.postimg.cc/LXdg4W7Z/orig-big.png') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Pixelify Sans', monospace;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .pixel-account {
+            position: relative;
+            z-index: 2;
+            background-color: #000000;
+            width: 92%;
+            max-width: 520px;
+            padding: 32px 24px 36px;
+            text-align: center;
+            border: 3px solid #2ecc71;
+            box-shadow: 8px 8px 0 #1a1a1a;
+            border-radius: 0px;
+        }
+
+        .pixel-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .pixel-logo img {
+            width: 75px;
+            height: 75px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .pixel-title {
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #2ecc71;
+            text-shadow: 2px 2px 0 #0a4d2a;
+            margin-bottom: 12px;
+        }
+
+        .pixel-sub {
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 13px;
+            color: #aaaaaa;
+            margin-bottom: 32px;
+            border-top: 1px solid #2ecc71;
+            border-bottom: 1px solid #2ecc71;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            letter-spacing: 1px;
+        }
+
+        .icon-svg {
+            width: 16px;
+            height: 16px;
+            fill: #2ecc71;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .icon-svg-sm {
+            width: 14px;
+            height: 14px;
+            fill: #2ecc71;
+        }
+
+        .icon-svg-btn {
+            width: 18px;
+            height: 18px;
+            fill: #000000;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .icon-svg-save {
+            width: 20px;
+            height: 20px;
+            fill: #000000;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .icon-svg-forgot {
+            width: 16px;
+            height: 16px;
+            fill: #000000;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .icon-svg-upload {
+            width: 20px;
+            height: 20px;
+            fill: #000000;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .email-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .email-input-wrapper input {
+            width: 100%;
+            background: #111;
+            border: 2px solid #2ecc71;
+            padding: 12px 40px 12px 12px;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 14px;
+            color: #2ecc71;
+            outline: none;
+            border-radius: 0px;
+        }
+
+        .email-input-wrapper input:focus {
+            background: #050505;
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
+
+        .email-icon-indicator {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .email-icon-indicator.show {
+            opacity: 1;
+        }
+
+        .email-icon-indicator svg {
+            width: 100%;
+            height: 100%;
+            fill: #4285F4;
+        }
+
+        .pixel-input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .pixel-input-group label {
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 12px;
+            color: #ddd;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .pixel-input-group input:not(.email-input) {
+            width: 100%;
+            background: #111;
+            border: 2px solid #2ecc71;
+            padding: 12px 12px;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 14px;
+            color: #2ecc71;
+            outline: none;
+            border-radius: 0px;
+        }
+
+        .pixel-input-group input:focus {
+            background: #050505;
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
+
+        .custom-select {
+            position: relative;
+            width: 100%;
+            background: #111;
+            border: 2px solid #2ecc71;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 14px;
+            color: #2ecc71;
+            cursor: pointer;
+            user-select: none;
+        }
+        .select-selected {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: space-between;
+        }
+        .select-selected::after {
+            content: "▼";
+            font-size: 12px;
+            color: #2ecc71;
+        }
+        .select-items {
+            position: absolute;
+            top: 100%;
+            left: -2px;
+            right: -2px;
+            background: #000;
+            border: 2px solid #2ecc71;
+            border-top: none;
+            z-index: 10;
+            display: none;
+        }
+        .select-items.open {
+            display: block;
+        }
+        .select-items div {
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .select-items div:hover {
+            background: #1a331a;
+            color: #ffcc00;
+        }
+        .verified-icon {
+            width: 16px;
+            height: 16px;
+            fill: #4285F4;
+            flex-shrink: 0;
+        }
+        .account-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            background: #1e1e1e;
+            color: #aaa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+        .account-type-badge.verified {
+            color: #4285F4;
+            border: 1px solid #4285F4;
+        }
+
+        .drop-zone {
+            background: #0a0f0a;
+            border: 2px dashed #2ecc71;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            color: #aaa;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone.drag-over {
+            background: #1a331a;
+            border-color: #ffcc00;
+            color: #ffcc00;
+        }
+
+        .drop-zone svg {
+            fill: #2ecc71;
+            width: 32px;
+            height: 32px;
+            margin-bottom: 8px;
+        }
+
+        .pixel-btn {
+            background-color: #2ecc71;
+            color: #000;
+            text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 0;
+            z-index: 1;
+            user-select: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: unset;
+            padding: .8rem 1.5rem;
+            text-decoration: none;
+            font-weight: 900;
+            transition: all 0.7s cubic-bezier(0, .8, .26, .99);
+            font-family: 'Pixelify Sans', monospace;
+            box-shadow: none;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .pixel-btn:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+            z-index: -1;
+            background-color: #2ecc71 !important;
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .pixel-btn:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        .pixel-btn:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .pixel-btn:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .pixel-btn:active {
+            transform: translateY(4px);
+        }
+
+        .pixel-btn:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .pixel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .forgot-btn {
+            background-color: #ffaa00;
+            color: #000;
+            border: 0;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 12px;
+            font-weight: 900;
+            padding: .8rem 1.5rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.7s cubic-bezier(0, .8, .26, .99);
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            white-space: unset;
+            text-decoration: none;
+            user-select: none;
+            margin-top: 8px;
+        }
+
+        .forgot-btn:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+            z-index: -1;
+            background-color: #ffaa00 !important;
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .forgot-btn:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        .forgot-btn:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .forgot-btn:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .forgot-btn:active {
+            transform: translateY(4px);
+        }
+
+        .forgot-btn:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .alert-pixel {
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 13px;
+            margin-top: 18px;
+            display: none;
+            background: black;
+            padding: 10px 12px;
+            text-align: left;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .alert-pixel.alert-error {
+            border-left: 3px solid #ff5544;
+            color: #ff8866;
+        }
+
+        .alert-pixel.alert-error svg {
+            fill: #ff5544;
+        }
+
+        .alert-pixel.alert-success {
+            border-left: 3px solid #2ecc71;
+            color: #aaffaa;
+        }
+
+        .alert-pixel.alert-success svg {
+            fill: #2ecc71;
+        }
+
+        .alert-pixel svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        #secretPhraseContainer {
+            display: none;
+            margin: 15px 0;
+        }
+
+        .avatar-page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .navbar {
+            background-color: #000000;
+            padding: 8px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            line-height: 0;
+        }
+
+        .logo-nav {
+            height: 50px;
+            width: auto;
+            image-rendering: pixelated;
+            object-fit: contain;
+        }
+
+        .avatar-text {
+            font-family: 'Pixelify Sans', monospace;
+            color: white;
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 1;
+            margin-top: 80px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .welcome-pixel {
+            font-family: 'Pixelify Sans', monospace;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 12px 28px;
+            border: 2px solid #2ecc71;
+            margin-bottom: 32px;
+            box-shadow: 5px 5px 0 #1a1a1a;
+            font-size: 18px;
+            color: #2ecc71;
+            flex-wrap: wrap;
+        }
+
+        .selected-avatar-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #2ecc71;
+        }
+
+        .welcome-text {
+            text-align: left;
+        }
+
+        .welcome-text h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .welcome-text p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .section-title {
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 0 #000;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .avatar-hint {
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            padding: 5px 15px;
+        }
+
+        .profiles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-bottom: 30px;
+        }
+
+        .profile-card {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 180px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card.selected {
+            border: 3px solid #2ecc71;
+            background: #e8f5e9;
+            box-shadow: 0 0 0 2px #2ecc71;
+        }
+
+        .profile-card.selected::after {
+            content: "SELECTED";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
+            color: black;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #000;
+            margin-bottom: 10px;
+        }
+
+        .profile-number {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .save-btn {
+            background-color: #2ecc71;
+            color: #000;
+            border: 0;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 20px;
+            font-weight: 900;
+            padding: .8rem 1.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: unset;
+            text-decoration: none;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            transition: all 0.7s cubic-bezier(0, .8, .26, .99);
+            box-shadow: none;
+            width: auto;
+            margin: 20px 10px 0;
+        }
+
+        .save-btn:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+            z-index: -1;
+            background-color: #2ecc71 !important;
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .save-btn:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        .save-btn:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .save-btn:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .save-btn:active {
+            transform: translateY(4px);
+        }
+
+        .save-btn:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .upload-btn {
+            background-color: #2ecc71;
+            color: #000;
+            border: 0;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 16px;
+            font-weight: 900;
+            padding: .8rem 1.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: unset;
+            text-decoration: none;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            transition: all 0.7s cubic-bezier(0, .8, .26, .99);
+            box-shadow: none;
+            margin: 20px 10px 0;
+        }
+
+        .upload-btn:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+            z-index: -1;
+            background-color: #2ecc71 !important;
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .upload-btn:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        .upload-btn:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .upload-btn:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .upload-btn:active {
+            transform: translateY(4px);
+        }
+
+        .upload-btn:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .delete-btn {
+            background-color: #aa3333;
+            color: #fff;
+            border: 0;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 16px;
+            font-weight: 900;
+            padding: .8rem 1.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: unset;
+            text-decoration: none;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            transition: all 0.7s cubic-bezier(0, .8, .26, .99);
+            box-shadow: none;
+            margin: 20px 10px 0;
+        }
+
+        .delete-btn:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+            z-index: -1;
+            background-color: #aa3333 !important;
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .delete-btn:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        .delete-btn:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .delete-btn:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .delete-btn:active {
+            transform: translateY(4px);
+        }
+
+        .delete-btn:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: black;
+            border: 2px solid #2ecc71;
+            font-family: 'Pixelify Sans', monospace;
+            color: #2ecc71;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .logout-btn:hover {
+            background: #1a1a1a;
+            transform: scale(1.02);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Pixelify Sans', monospace;
+        }
+
+        .modal-content {
+            background-color: #111;
+            border: 3px solid #2ecc71;
+            padding: 30px;
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 8px 8px 0 #000;
+            color: #2ecc71;
+        }
+
+        .modal-content img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            image-rendering: pixelated;
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .modal-content .pixel-input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .modal-content .pixel-input-group label {
+            color: #ddd;
+            font-size: 11px;
+        }
+
+        .modal-content .pixel-input-group input {
+            width: 100%;
+            background: #000;
+            border: 2px solid #ffaa00;
+            padding: 10px;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 13px;
+            color: #ffaa00;
+            outline: none;
+        }
+
+        .modal-content .attempts-text {
+            color: #ff5544;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .modal-content .hint-display {
+            background: #000;
+            border: 1px solid #2ecc71;
+            padding: 12px;
+            margin-top: 15px;
+            color: #2ecc71;
+            font-size: 14px;
+            display: none;
+            text-align: center;
+        }
+
+        .modal-btn {
+            background: #0e2a1a;
+            border: 2px solid #2ecc71;
+            font-family: 'Pixelify Sans', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            color: #2ecc71;
+            cursor: pointer;
+            margin: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-btn:hover {
+            background: #1f4d2d;
+        }
+
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .modal-btn.warn-btn {
+            background: #1a0a00;
+            border-color: #ff5544;
+            color: #ff5544;
+        }
+
+        .modal-btn.warn-btn:hover {
+            background: #2a0a00;
+        }
+
+        .modal-btn.done-btn {
+            background: #0a2a0a;
+            border-color: #2ecc71;
+            color: #2ecc71;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .modal-btn.done-btn:hover {
+            background: #1f4d1f;
+        }
+
+        .modal-btn.login-btn {
+            background: #1a3a0a;
+            border-color: #ffaa00;
+            color: #ffaa00;
+            cursor: pointer;
+            pointer-events: auto;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .modal-btn.login-btn:hover {
+            background: #2a5a0a;
+        }
+
+        .timer-text {
+            color: #ff5544;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .custom-avatar-card {
+            position: relative;
+        }
+
+        .custom-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ffaa00;
+            color: #000;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Pixelify Sans', monospace;
+        }
+
+        #forgotStageInfo {
+            color: #ffaa00;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        #forgotLoginSection {
+            display: none;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .pixel-title {
+                font-size: 26px;
+            }
+            .pixel-account {
+                padding: 24px 18px;
+                width: 95%;
+            }
+            .pixel-logo img {
+                width: 60px;
+                height: 60px;
+            }
+            .navbar {
+                padding: 6px 40px;
+                gap: 10px;
+            }
+            .logo-nav {
+                height: 32px;
+            }
+            .avatar-text {
+                font-size: 18px;
+            }
+            .main-content {
+                margin-top: 65px;
+                padding: 20px 15px;
+            }
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            .avatar-hint {
+                font-size: 10px;
+                margin-bottom: 20px;
+            }
+            .profile-card {
+                width: 140px;
+                padding: 10px;
+            }
+            .profile-img {
+                width: 110px;
+                height: 110px;
+            }
+            .welcome-pixel {
+                font-size: 14px;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .selected-avatar-img {
+                width: 45px;
+                height: 45px;
+            }
+            .welcome-text h3 {
+                font-size: 16px;
+            }
+            .logout-btn {
+                padding: 6px 14px;
+                font-size: 12px;
+                bottom: 15px;
+                right: 15px;
+            }
+            .save-btn,
+            .upload-btn,
+            .delete-btn {
+                font-size: 14px;
+                padding: .8rem 1.5rem;
+                margin: 10px 5px 0;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-content h2 {
+                font-size: 20px;
+            }
+            .modal-btn {
+                font-size: 12px;
+            }
+            .icon-svg {
+                width: 14px;
+                height: 14px;
+            }
+            .icon-svg-btn {
+                width: 16px;
+                height: 16px;
+            }
+            .email-icon-indicator {
+                width: 16px;
+                height: 16px;
+                right: 10px;
+            }
+            .drop-zone svg {
+                width: 28px;
+                height: 28px;
+            }
+            .alert-pixel svg {
+                width: 18px;
+                height: 18px;
+            }
+            .forgot-btn {
+                font-size: 10px;
+                padding: .8rem 1.5rem;
+            }
+            .icon-svg-upload {
+                width: 16px;
+                height: 16px;
+            }
+            .pixel-btn {
+                font-size: 16px;
+                padding: .8rem 1.5rem;
+            }
+            .verified-icon {
+                width: 14px;
+                height: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="accountPage" class="pixel-account">
+        <div class="pixel-logo">
+            <img src="https://i.postimg.cc/66MLbbg8/restudio-profile.png" alt="RESTUDIO LOGO">
+        </div>
+        <div class="pixel-title">RESTUDIO ACCOUNT</div>
+        <div class="pixel-sub">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="m17,5v-2h-1v-1h-2v-1h-4v1h-2v1h-1v2h-1v4h1v2h1v1h2v1h4v-1h2v-1h1v-2h1v-4h-1Zm-2,4v1h-1v1h-4v-1h-1v-1h-1v-4h1v-1h1v-1h4v1h1v1h1v4h-1Z" />
+                <path d="m21,19v-1h-1v-1h-1v-1h-2v-1H7v1h-2v1h-1v1h-1v1h-1v3h1v1h18v-1h1v-3h-1Zm-16,0v-1h2v-1h10v1h2v1h1v2H4v-2h1Z" />
+            </svg>
+            CREATE NEW ACCOUNT
+        </div>
+
+        <div id="dropZone" class="drop-zone">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <rect x="1" y="13" width="5" height="3" />
+                <polygon points="23 8 23 22 22 22 22 23 7 23 7 22 6 22 6 16 12 16 12 20 13 20 13 19 14 19 14 18 15 18 15 17 16 17 16 16 17 16 17 15 18 15 18 14 17 14 17 13 16 13 16 12 15 12 15 11 14 11 14 10 13 10 13 9 12 9 12 13 6 13 6 2 7 2 7 1 16 1 16 8 23 8" />
+                <polygon points="23 6 23 7 17 7 17 1 18 1 18 2 19 2 19 3 20 3 20 4 21 4 21 5 22 5 22 6 23 6" />
+            </svg>
+            <br>DROP .REAC FILE HERE <br> or click to select
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="21 4 21 5 20 5 20 6 19 6 19 7 18 7 18 8 17 8 17 9 16 9 16 10 15 10 15 11 14 11 14 12 13 12 13 13 11 13 11 12 10 12 10 11 9 11 9 10 8 10 8 9 7 9 7 8 6 8 6 7 5 7 5 6 4 6 4 5 3 5 3 4 21 4" />
+                    <polygon points="23 5 23 19 22 19 22 20 2 20 2 19 1 19 1 5 3 5 3 6 4 6 4 7 5 7 5 8 6 8 6 9 7 9 7 10 8 10 8 11 9 11 9 12 10 12 10 13 11 13 11 14 13 14 13 13 14 13 14 12 15 12 15 11 16 11 16 10 17 10 17 9 18 9 18 8 19 8 19 7 20 7 20 6 21 6 21 5 23 5" />
+                </svg>
+                EMAIL (GMAIL ONLY)
+            </label>
+            <div class="email-input-wrapper">
+                <input type="email" id="signupEmail" placeholder="username@gmail.com" autocomplete="off">
+                <div id="gmailIconIndicator" class="email-icon-indicator">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="23 10 23 15 22 15 22 17 21 17 21 19 20 19 20 20 19 20 19 21 17 21 17 22 15 22 15 23 9 23 9 22 7 22 7 21 5 21 5 20 4 20 4 19 3 19 3 17 2 17 2 15 1 15 1 9 2 9 2 7 3 7 3 5 4 5 4 4 5 4 5 3 7 3 7 2 9 2 9 1 15 1 15 2 17 2 17 3 19 3 19 5 18 5 18 6 17 6 17 7 15 7 15 6 9 6 9 7 7 7 7 9 6 9 6 15 7 15 7 17 9 17 9 18 15 18 15 17 17 17 17 15 18 15 18 14 12 14 12 10 23 10" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m17,5v-2h-1v-1h-2v-1h-4v1h-2v1h-1v2h-1v4h1v2h1v1h2v1h4v-1h2v-1h1v-2h1v-4h-1Zm-2,4v1h-1v1h-4v-1h-1v-1h-1v-4h1v-1h1v-1h4v1h1v1h1v4h-1Z" />
+                    <path d="m21,19v-1h-1v-1h-1v-1h-2v-1H7v1h-2v1h-1v1h-1v1h-1v3h1v1h18v-1h1v-3h-1Zm-16,0v-1h2v-1h10v1h2v1h1v2H4v-2h1Z" />
+                </svg>
+                USERNAME
+            </label>
+            <input type="text" id="signupUsername" placeholder="nickname">
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m12,2a10,10 0 1,0 10,10 10,10 0 0,0 -10,-10zm-2,15l-5-5 1.41-1.41 3.59,3.59 7.59-7.59 1.41,1.41-9,9z" />
+                </svg>
+                WHO IS THIS ACCOUNT FOR?
+            </label>
+            <div class="custom-select" id="accountTypeSelect">
+                <div class="select-selected" id="accountTypeSelected">Personal Account</div>
+                <div class="select-items" id="accountTypeItems">
+                    <div data-value="personal">Personal Account</div>
+                    <div data-value="developer">
+                        <svg class="verified-icon" viewBox="0 0 24 24"><path d="m22,10v-1h-1v-4h-1v-1h-1v-1h-4v-1h-1v-1h-4v1h-1v1h-4v1h-1v1h-1v4h-1v1h-1v4h1v1h1v4h1v1h1v1h4v1h1v1h4v-1h1v-1h4v-1h1v-1h1v-4h1v-1h1v-4h-1Zm-15,1h1v-1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1v1h1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-1h-1v-2Z"/></svg>
+                        Developer account
+                    </div>
+                    <div data-value="team">
+                        <svg class="verified-icon" viewBox="0 0 24 24"><path d="m22,10v-1h-1v-4h-1v-1h-1v-1h-4v-1h-1v-1h-4v1h-1v1h-4v1h-1v1h-1v4h-1v1h-1v4h1v1h1v4h1v1h1v1h4v1h1v1h4v-1h1v-1h4v-1h1v-1h1v-4h1v-1h1v-4h-1Zm-15,1h1v-1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1v1h1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-1h-1v-2Z"/></svg>
+                        Team account
+                    </div>
+                    <div data-value="game_publisher">
+                        <svg class="verified-icon" viewBox="0 0 24 24"><path d="m22,10v-1h-1v-4h-1v-1h-1v-1h-4v-1h-1v-1h-4v1h-1v1h-4v1h-1v1h-1v4h-1v1h-1v4h1v1h1v4h1v1h1v1h4v1h1v1h4v-1h1v-1h4v-1h1v-1h1v-4h1v-1h1v-4h-1Zm-15,1h1v-1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1v1h1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-1h-1v-2Z"/></svg>
+                        Game publisher account
+                    </div>
+                    <div data-value="admin">
+                        <svg class="verified-icon" viewBox="0 0 24 24"><path d="m22,10v-1h-1v-4h-1v-1h-1v-1h-4v-1h-1v-1h-4v1h-1v1h-4v1h-1v1h-1v4h-1v1h-1v4h1v1h1v4h1v1h1v1h4v1h1v1h4v-1h1v-1h4v-1h1v-1h1v-4h1v-1h1v-4h-1Zm-15,1h1v-1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1v1h1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-1h-1v-2Z"/></svg>
+                        Admin account
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="signupAccountType" value="personal">
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m19,1v1h-1v1h-1v-1h-1v-1h-2v1h-1v1h-2v-1h-1v-1h-2v1h-1v1h-1v-1h-1v-1h-1v22h1v-1h1v-1h1v1h1v1h2v-1h1v-1h2v1h1v1h2v-1h1v-1h1v1h1v1h1V1h-1Zm-1,8H6v-2h12v2Zm0,4H6v-2h12v2Zm0,4H6v-2h12v2Z" />
+                </svg>
+                PASSWORD
+            </label>
+            <input type="password" id="signupPassword" placeholder="********">
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M22.0002 2H21V3.00023H22.0002V2Z" />
+                    <path d="M21.0002 3H20V4.00023H21.0002V3Z" />
+                    <path d="M20.0009 4H16V5.00023H20.0009V4Z" />
+                    <path d="M16.0005 3H14V4.00023H16.0005V3Z" />
+                    <path d="M14.0002 2H13V3.00023H14.0002V2Z" />
+                    <path d="M13.0005 1H11V2.00023H13.0005V1Z" />
+                    <path d="M11.0002 2H10V3.00023H11.0002V2Z" />
+                    <path d="M10.0005 3H8V4.00023H10.0005V3Z" />
+                    <path d="M8.00091 4H4V5.00023H8.00091V4Z" />
+                    <path d="M4.00029 3H3.00006V4.00023H4.00029V3Z" />
+                    <path d="M3.00023 2H2V3.00023H3.00023V2Z" />
+                    <path d="M3.00023 14H2V16.0005H3.00023V14Z" />
+                    <path d="M4.00029 16H3.00006V18.0005H4.00029V16Z" />
+                    <path d="M5.00023 18H4V19.0002H5.00023V18Z" />
+                    <path d="M7.00045 19H5V20.0002H7.00045V19Z" />
+                    <path d="M9.00045 20H7V21.0002H9.00045V20Z" />
+                    <path d="M11.0005 21H9V22.0002H11.0005V21Z" />
+                    <path d="M13.0005 22H11V23.0002H13.0005V22Z" />
+                    <path d="M15.0005 21H13V22.0002H15.0005V21Z" />
+                    <path d="M17.0005 20H15V21.0002H17.0005V20Z" />
+                    <path d="M19.0005 19H17V20.0002H19.0005V19Z" />
+                    <path d="M20.0002 18H19V19.0002H20.0002V18Z" />
+                    <path d="M21.0002 16H20V18.0005H21.0002V16Z" />
+                    <path d="M22.0002 14H21V16.0005H22.0002V14Z" />
+                    <path d="M23 3H22V14H23V3Z" />
+                    <path d="M2 3H1V14H2V3Z" />
+                    <path d="M20.0001 5V6H16.0001V5H14.0001V4H13.0001V3H11.0001V4H10.0001V5H8.00006V6H4.00006V5H3.00006V14H4.00006V16H5.00006V18H7.00006V19H9.00006V20H11.0001V21H13.0001V20H15.0001V19H17.0001V18H19.0001V16H20.0001V14H21.0001V5H20.0001ZM10.0001 17V15H11.0001V12H10.0001V9H11.0001V8H13.0001V9H14.0001V12H13.0001V15H14.0001V17H10.0001Z" />
+                </svg>
+                SECRET PHRASE
+            </label>
+            <input type="password" id="signupSecretPhrase" placeholder="never stored - keep it safe!">
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m22,10v-2h-1v-2h-1v-2h-1v-1h-2v-1h-3v-1h-4v1h-3v1h-2v1h-1v1h-1v2h-1v2h-1v6h1v2h1v2h1v1h1v1h2v1h3v1h4v-1h3v-3h-3v1h-4v-1h-3v-1h-1v-2h-1v-2h-1v-4h1v-2h1v-2h1v-1h3v-1h4v1h3v1h1v2h1v2h1v4h-2v-4h-1v-2h-1v-1h-2v-1h-4v1h-2v1h-1v2h-1v4h1v2h1v1h2v1h4v-1h2v-1h1v1h4v-1h1v-2h1v-4h-1Zm-7,4h-1v1h-4v-1h-1v-4h1v-1h4v1h1v4Z" />
+                </svg>
+                PHRASE HINT
+            </label>
+            <input type="text" id="signupPhraseHint" placeholder="e.g. My cat name + birth year" autocomplete="off">
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="10 13 11 13 11 21 10 21 10 22 2 22 2 21 1 21 1 7 2 7 2 5 3 5 3 4 4 4 4 3 6 3 6 2 8 2 8 3 9 3 9 6 8 6 8 7 6 7 6 8 5 8 5 12 10 12 10 13" />
+                    <polygon points="23 13 23 21 22 21 22 22 14 22 14 21 13 21 13 7 14 7 14 5 15 5 15 4 16 4 16 3 18 3 18 2 20 2 20 3 21 3 21 6 20 6 20 7 18 7 18 8 17 8 17 12 22 12 22 13 23 13" />
+                </svg>
+                CHALLENGE QUESTION
+            </label>
+            <input type="text" id="signupChallengeQuestion" placeholder="e.g. My first pet name?" autocomplete="off">
+        </div>
+
+        <div class="pixel-input-group">
+            <label>
+                <svg class="icon-svg-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="10 13 11 13 11 21 10 21 10 22 2 22 2 21 1 21 1 7 2 7 2 5 3 5 3 4 4 4 4 3 6 3 6 2 8 2 8 3 9 3 9 6 8 6 8 7 6 7 6 8 5 8 5 12 10 12 10 13" />
+                    <polygon points="23 13 23 21 22 21 22 22 14 22 14 21 13 21 13 7 14 7 14 5 15 5 15 4 16 4 16 3 18 3 18 2 20 2 20 3 21 3 21 6 20 6 20 7 18 7 18 8 17 8 17 12 22 12 22 13 23 13" />
+                </svg>
+                CHALLENGE ANSWER
+            </label>
+            <input type="text" id="signupChallengeAnswer" placeholder="case-sensitive answer" autocomplete="off">
+        </div>
+
+        <button class="forgot-btn" id="forgotPhraseBtn">
+            <svg class="icon-svg-forgot" viewBox="0 0 24 24">
+                <polygon points="14 15 14 17 10 17 10 15 11 15 11 10 10 10 10 9 13 9 13 15 14 15" />
+                <rect x="11" y="6" width="2" height="2" />
+                <path d="m22,9v-2h-1v-2h-1v-1h-1v-1h-2v-1h-2v-1h-6v1h-2v1h-2v1h-1v1h-1v2h-1v2h-1v6h1v2h1v2h1v1h1v1h2v1h2v1h6v-1h2v-1h2v-1h1v-1h1v-2h1v-2h1v-6h-1Zm-1,6h-1v2h-1v1h-1v1h-1v1h-2v1h-6v-1h-2v-1h-1v-1h-1v-1h-1v-2h-1v-6h1v-2h1v-1h1v-1h1v-1h2v-1h6v1h2v1h1v1h1v1h1v2h1v6Z" />
+            </svg>
+            Sign in
+        </button>
+
+        <div id="secretPhraseContainer">
+            <div class="pixel-input-group">
+                <label>
+                    ENTER YOUR SECRET PHRASE
+                </label>
+                <input type="password" id="loginSecretPhrase" placeholder="phrase">
+            </div>
+            <button class="pixel-btn" id="decryptAndLoginBtn">
+                <svg class="icon-svg-btn" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                </svg>
+                DECRYPT & LOGIN
+            </button>
+        </div>
+
+        <button class="pixel-btn" id="createAccountBtn">
+            <svg class="icon-svg-btn" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="15 14 15 18 14 18 14 19 10 19 10 18 9 18 9 14 10 14 10 13 14 13 14 14 15 14" />
+                <path d="m22,7v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1H2v1h-1v20h1v1h20v-1h1V7h-1Zm-7,3V3h1v1h1v1h1v1h1v1h1v1h1v13H3V3h1v7h11ZM6,3h7v5h-7V3Z" />
+            </svg>
+            CREATE ACCOUNT
+        </button>
+
+        <div id="signupAlert" class="alert-pixel" style="display: none;"></div>
+    </div>
+
+    <div id="avatarPage" class="avatar-page">
+        <div class="navbar">
+            <div class="logo-container">
+                <img class="logo-nav" src="https://i.postimg.cc/qR1LmR6d/swrh-restudio.png" alt="RESTUDIO LOGO">
+            </div>
+            <span class="avatar-text">AVATAR</span>
+        </div>
+
+        <div class="main-content">
+            <div class="welcome-pixel" id="welcomeUser"></div>
+            <div class="section-title">CHOOSE YOUR AVATAR</div>
+            <div class="avatar-hint">Click on any profile picture to select your avatar</div>
+
+            <div class="profiles-grid" id="profilesGrid"></div>
+
+            <div style="display:flex;justify-content:center;flex-wrap:wrap;">
+                <button class="upload-btn" id="uploadAvatarBtn">
+                    <svg class="icon-svg-upload" viewBox="0 0 24 24">
+                        <rect x="1" y="13" width="5" height="3" />
+                        <polygon points="23 8 23 22 22 22 22 23 7 23 7 22 6 22 6 16 12 16 12 20 13 20 13 19 14 19 14 18 15 18 15 17 16 17 16 16 17 16 17 15 18 15 18 14 17 14 17 13 16 13 16 12 15 12 15 11 14 11 14 10 13 10 13 9 12 9 12 13 6 13 6 2 7 2 7 1 16 1 16 8 23 8" />
+                        <polygon points="23 6 23 7 17 7 17 1 18 1 18 2 19 2 19 3 20 3 20 4 21 4 21 5 22 5 22 6 23 6" />
+                    </svg>
+                    CHOOSE FROM YOUR COMPUTER
+                </button>
+                <button class="delete-btn" id="deleteAvatarBtn">
+                    <svg style="fill:#fff; width:18px; height:18px; margin-right:6px;" viewBox="0 0 24 24">
+                        <polygon points="22 3 22 5 2 5 2 3 8 3 8 2 9 2 9 1 15 1 15 2 16 2 16 3 22 3" />
+                        <path d="m4,7v15h1v1h14v-2h1V7H4Zm12,12h-2v-10h2v10Zm-6,0h-2v-10h2v10Z" />
+                    </svg>
+                    DELETE AVATAR
+                </button>
+                <button class="save-btn" id="saveAccountBtn">
+                    <svg class="icon-svg-save" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    SAVE!
+                </button>
+            </div>
+        </div>
+
+        <button class="logout-btn" id="logoutBtn">LOGOUT</button>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <img src="https://i.postimg.cc/904R5k7k/accepted.png" alt="Success">
+            <h2>SUCCESS!</h2>
+            <p>Your .REAC file has been downloaded securely.</p>
+            <button class="modal-btn" id="closeSuccessModal">OK</button>
+        </div>
+    </div>
+
+    <!-- ========== forgot modal - TWO-STEP RECOVERY WITH DIRECT LOGIN ========== -->
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <svg style="fill:#ffaa00;width:60px;height:60px;margin-bottom:15px;" viewBox="0 0 24 24">
+                <polygon points="14 15 14 17 10 17 10 15 11 15 11 10 10 10 10 9 13 9 13 15 14 15" />
+                <rect x="11" y="6" width="2" height="2" />
+                <path d="m22,9v-2h-1v-2h-1v-1h-1v-1h-2v-1h-2v-1h-6v1h-2v1h-2v1h-1v1h-1v2h-1v2h-1v6h1v2h1v2h1v1h1v1h2v1h2v1h6v-1h2v-1h2v-1h1v-1h1v-2h1v-2h1v-6h-1Zm-1,6h-1v2h-1v1h-1v1h-1v1h-2v1h-6v-1h-2v-1h-1v-1h-1v-1h-1v-2h-1v-6h1v-2h1v-1h1v-1h1v-1h2v-1h6v1h2v1h1v1h1v1h1v2h1v6Z" />
+            </svg>
+            <h2 style="color:#ffaa00;">PHRASE RECOVERY</h2>
+            <p>Drop your .REAC file to recover your phrase hint.</p>
+
+            <div id="forgotDropZone" class="drop-zone" style="margin:15px 0;border-color:#ffaa00;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill:#ffaa00;width:28px;height:28px;">
+                    <rect x="1" y="13" width="5" height="3" />
+                    <polygon points="23 8 23 22 22 22 22 23 7 23 7 22 6 22 6 16 12 16 12 20 13 20 13 19 14 19 14 18 15 18 15 17 16 17 16 16 17 16 17 15 18 15 18 14 17 14 17 13 16 13 16 12 15 12 15 11 14 11 14 10 13 10 13 9 12 9 12 13 6 13 6 2 7 2 7 1 16 1 16 8 23 8" />
+                    <polygon points="23 6 23 7 17 7 17 1 18 1 18 2 19 2 19 3 20 3 20 4 21 4 21 5 22 5 22 6 23 6" />
+                </svg>
+                <br>DROP .REAC HERE
+            </div>
+
+            <div id="forgotStageInfo" style="color:#ffaa00;font-size:13px;margin-bottom:10px;display:none;"></div>
+
+            <div id="forgotChallengeSection" style="display:none;">
+                <div class="pixel-input-group">
+                    <label id="forgotChallengeLabel" style="color:#ffaa00;"></label>
+                    <input type="text" id="forgotChallengeAnswer" placeholder="" autocomplete="off">
+                </div>
+                <div class="attempts-text" id="forgotAttemptsText">Attempts remaining: 3</div>
+                <div class="timer-text" id="forgotTimerText"></div>
+                <div class="hint-display" id="forgotHintDisplay"></div>
+                <button class="modal-btn" id="forgotSubmitAnswer">CHECK ANSWER</button>
+                
+                <!-- Direct login section after recovery -->
+                <div id="forgotLoginSection">
+                    <div class="pixel-input-group" style="margin-top:15px;">
+                        <label style="color:#2ecc71;">ENTER YOUR SECRET PHRASE TO LOGIN</label>
+                        <input type="password" id="forgotLoginPhrase" placeholder="Your secret phrase" autocomplete="off" style="border-color:#2ecc71;color:#2ecc71;">
+                    </div>
+                    <button class="modal-btn login-btn" id="forgotLoginBtn">
+                        <svg style="width:16px;height:16px;fill:#ffaa00;margin-right:6px;" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        LOGIN NOW
+                    </button>
+                </div>
+            </div>
+
+            <button class="modal-btn warn-btn" id="closeForgotModal">CLOSE</button>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept=".reac" style="display: none;">
+    <input type="file" id="forgotFileInput" accept=".reac" style="display: none;">
+    <input type="file" id="customAvatarInput" accept="image/*" style="display: none;">
+
+    <script>
+        (function() {
+            // ========== Default avatar (no-photo icon) ==========
+            const DEFAULT_AVATAR_SVG = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23e0e0e0'/%3E%3Cpolygon points='7 9 6 9 6 5 7 5 7 3 8 3 8 2 10 2 10 1 14 1 14 2 16 2 16 3 17 3 17 5 18 5 18 9 17 9 17 11 16 11 16 12 14 12 14 13 10 13 10 12 8 12 8 11 7 11 7 9' fill='%23555555'/%3E%3Cpolygon points='22 19 22 22 21 22 21 23 3 23 3 22 2 22 2 19 3 19 3 18 4 18 4 17 5 17 5 16 7 16 7 15 17 15 17 16 19 16 19 17 20 17 20 18 21 18 21 19 22 19' fill='%23555555'/%3E%3C/svg%3E`;
+
+            // ========== PBKDF2 + AES-GCM encryption ==========
+            async function deriveKey(secretPhrase, salt) {
+                const encoder = new TextEncoder();
+                const keyMaterial = await crypto.subtle.importKey(
+                    'raw', encoder.encode(secretPhrase), 'PBKDF2', false, ['deriveKey']
+                );
+                return crypto.subtle.deriveKey({
+                    name: 'PBKDF2',
+                    salt: salt,
+                    iterations: 100000,
+                    hash: 'SHA-256'
+                }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+            }
+
+            function arrayBufferToBase64(buffer) {
+                const bytes = new Uint8Array(buffer);
+                let binary = '';
+                for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+                return btoa(binary);
+            }
+
+            function base64ToArrayBuffer(base64) {
+                const binary = atob(base64);
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                return bytes.buffer;
+            }
+
+            async function createReacFile(userData, secretPhrase) {
+                const salt = crypto.getRandomValues(new Uint8Array(16));
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                const key = await deriveKey(secretPhrase, salt);
+                const encoder = new TextEncoder();
+                const data = encoder.encode(JSON.stringify(userData));
+                const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, data);
+                return JSON.stringify({
+                    v: 1,
+                    salt: arrayBufferToBase64(salt),
+                    iv: arrayBufferToBase64(iv),
+                    data: arrayBufferToBase64(encrypted)
+                });
+            }
+
+            async function decryptReacFile(fileContent, secretPhrase) {
+                let fileObj;
+                try { fileObj = JSON.parse(fileContent); } catch (e) { throw new Error(
+                        'Invalid .REAC file format'); }
+                if (!fileObj.salt || !fileObj.iv || !fileObj.data) throw new Error(
+                    'Missing fields in .REAC file');
+                const salt = new Uint8Array(base64ToArrayBuffer(fileObj.salt));
+                const iv = new Uint8Array(base64ToArrayBuffer(fileObj.iv));
+                const encryptedData = new Uint8Array(base64ToArrayBuffer(fileObj.data));
+                const key = await deriveKey(secretPhrase, salt);
+                const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key,
+                encryptedData);
+                const decoder = new TextDecoder();
+                return JSON.parse(decoder.decode(decrypted));
+            }
+
+            async function decryptReacFilePartial(fileContent, secretPhrase) {
+                return decryptReacFile(fileContent, secretPhrase);
+            }
+
+            // ========== UI data ==========
+            const avatarImages = [
+                { src: "https://i.postimg.cc/5yCTSw3G/bottts-Neutral-1777730197159.png", number: 1 },
+                { src: "https://i.postimg.cc/c4WXzy4S/avataaars-Neutral-1777730368743.png", number: 2 },
+                { src: "https://i.postimg.cc/7YqnV3mk/bottts-Neutral-1777730201930.png", number: 3 },
+                { src: "https://i.postimg.cc/hjF97Tfw/lorelei-Neutral-1777730236367.png", number: 4 },
+                { src: "https://i.postimg.cc/NFBmdt8k/pixel-Art-Neutral-1777730293634.png", number: 5 },
+                { src: "https://i.postimg.cc/wBNNHM0c/pixel-Art-Neutral-1777730304180.png", number: 6 },
+                { src: "https://i.postimg.cc/BbmLNKnQ/thumbs-1777730336906.png", number: 7 }
+            ];
+
+            let currentUser = null;
+            let currentAvatar = null;
+            let pendingReacContent = null;
+            let customAvatarUrl = null;
+
+            // ========== Forgot phrase recovery system ==========
+            const MAX_ATTEMPTS = 3;
+            const LOCKOUT_SECONDS = 300;
+            let forgotAttempts = MAX_ATTEMPTS;
+            let forgotLockedUntil = null;
+            let forgotPendingFile = null;
+            let forgotPendingUserData = null;
+            let forgotTimerInterval = null;
+            let forgotStage = 'decrypt'; // 'decrypt' or 'challenge'
+
+            function validateEmail(email) { return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email); }
+
+            function isGmail(email) { return email.toLowerCase().endsWith('@gmail.com'); }
+
+            function updateGmailIcon() {
+                const icon = document.getElementById('gmailIconIndicator');
+                const email = document.getElementById('signupEmail').value.trim();
+                icon.classList.toggle('show', email.toLowerCase().includes('gmail') && email.length > 0);
+            }
+
+            function showAlert(message, isError = true) {
+                const alert = document.getElementById('signupAlert');
+                alert.classList.remove('alert-error', 'alert-success');
+                if (isError) {
+                    alert.classList.add('alert-error');
+                    alert.innerHTML =
+                        `<svg viewBox="0 0 24 24" fill="currentColor"><path d="m22,20v-2h-1v-2h-1v-2h-1v-2h-1v-2h-1v-2h-1v-2h-1v-2h-1v-2h-1v-1h-2v1h-1v2h-1v2h-1v2h-1v2h-1v2h-1v2h-1v2h-1v2h-1v2h-1v2h1v1h20v-1h1v-2h-1Zm-12-9h4v3h-1v3h-2v-3h-1v-3Zm1,7h2v2h-2v-2Z"/></svg> ${message}`;
+                } else {
+                    alert.classList.add('alert-success');
+                    alert.innerHTML =
+                        `<svg viewBox="0 0 24 24"><path d="m22,10v-1h-7v-2h1V3h-1v-1h-2v1h-1v3h-1v2h-1v1h-1v1h-1v9h1v1h1v1h2v1h7v-1h1v-3h1v-3h1v-3h1v-2h-1Zm-3,5v3h-1v2h-5v-1h-2v-1h-1v-7h1v-1h1v-1h1v1h1v1h6v4h-1Z"/><polygon points="6 9 6 22 2 22 2 21 1 21 1 10 2 10 2 9 6 9"/></svg> ${message}`;
+                }
+                alert.style.display = 'flex';
+            }
+
+            function getAccountTypeDisplay(type) {
+                const map = {
+                    personal: 'Personal',
+                    developer: 'Developer',
+                    team: 'Team',
+                    game_publisher: 'Game Publisher',
+                    admin: 'Admin'
+                };
+                return map[type] || type;
+            }
+
+            function showAvatarPage(userData) {
+                currentUser = userData;
+                if (userData.customAvatar) {
+                    currentAvatar = userData.customAvatar;
+                    customAvatarUrl = userData.customAvatar;
+                } else if (userData.avatar && userData.avatar !== DEFAULT_AVATAR_SVG) {
+                    currentAvatar = userData.avatar;
+                    customAvatarUrl = null;
+                } else {
+                    currentAvatar = DEFAULT_AVATAR_SVG;
+                    customAvatarUrl = null;
+                }
+                document.getElementById('accountPage').style.display = 'none';
+                document.getElementById('avatarPage').style.display = 'block';
+                updateWelcomeUser();
+                renderAvatarGrid();
+            }
+
+            function updateWelcomeUser() {
+                const type = currentUser.accountType || 'personal';
+                const isVerified = type !== 'personal';
+                const badgeHtml = isVerified ?
+                    `<span class="account-type-badge verified">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#4285F4"><path d="m22,10v-1h-1v-4h-1v-1h-1v-1h-4v-1h-1v-1h-4v1h-1v1h-4v1h-1v1h-1v4h-1v1h-1v4h1v1h1v4h1v1h1v1h4v1h1v1h4v-1h1v-1h4v-1h1v-1h1v-4h1v-1h1v-4h-1Zm-15,1h1v-1h1v1h1v1h2v-1h1v-1h1v-1h1v-1h1v1h1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-2v-1h-1v-1h-1v-1h-1v-2Z"/></svg>
+                        ${getAccountTypeDisplay(type)}
+                    </span>` : '';
+                document.getElementById('welcomeUser').innerHTML = `
+                    <img class="selected-avatar-img" src="${currentAvatar}" alt="avatar">
+                    <div class="welcome-text">
+                        <h3>Welcome, ${currentUser.username}👋 ${badgeHtml}</h3>
+                        <p>${currentUser.email}</p>
+                    </div>`;
+            }
+
+            function renderAvatarGrid() {
+                const grid = document.getElementById('profilesGrid');
+                grid.innerHTML = '';
+                const defaultImage = { src: DEFAULT_AVATAR_SVG, number: 0, isDefault: true };
+                const allImages = [defaultImage, ...avatarImages];
+                if (customAvatarUrl) {
+                    allImages.push({ src: customAvatarUrl, number: 'CUSTOM', isCustom: true });
+                }
+                allImages.forEach(img => {
+                    const card = document.createElement('div');
+                    card.className =
+                        `profile-card ${currentAvatar === img.src ? 'selected' : ''} ${img.isCustom ? 'custom-avatar-card' : ''} ${img.isDefault ? 'default-avatar-card' : ''}`;
+                    card.innerHTML = `
+                        <img class="profile-img" src="${img.src}">
+                        ${img.isCustom ? '<div class="custom-badge">YOURS</div>' : (img.isDefault ? '<div class="custom-badge" style="background:#999;">DEFAULT</div>' : '')}
+                        <div class="profile-number">${img.isDefault ? 'No Photo' : (img.isCustom ? 'Custom' : '#' + img.number)}</div>`;
+                    card.onclick = () => selectAvatar(img.src);
+                    grid.appendChild(card);
+                });
+            }
+
+            function selectAvatar(url) {
+                currentAvatar = url;
+                currentUser.avatar = url;
+                if (url === DEFAULT_AVATAR_SVG) {
+                    currentUser.customAvatar = null;
+                    customAvatarUrl = null;
+                } else if (url !== DEFAULT_AVATAR_SVG && !avatarImages.some(img => img.src === url)) {
+                    currentUser.customAvatar = url;
+                    customAvatarUrl = url;
+                } else {
+                    currentUser.customAvatar = null;
+                    customAvatarUrl = null;
+                }
+                updateWelcomeUser();
+                document.querySelectorAll('.profile-card').forEach(c => {
+                    c.classList.remove('selected');
+                    if (c.querySelector('img').src === url) c.classList.add('selected');
+                });
+            }
+
+            function deleteAvatar() {
+                currentAvatar = DEFAULT_AVATAR_SVG;
+                currentUser.avatar = DEFAULT_AVATAR_SVG;
+                currentUser.customAvatar = null;
+                customAvatarUrl = null;
+                updateWelcomeUser();
+                renderAvatarGrid();
+            }
+
+            // ========== Drag & Drop for main page ==========
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            dropZone.onclick = () => fileInput.click();
+            fileInput.onchange = e => { if (e.target.files[0]) handleFileLoad(e.target.files[0]);
+                fileInput.value = ''; };
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
+                dropZone.addEventListener(ev, e => { e.preventDefault();
+                    e.stopPropagation(); });
+            });
+            dropZone.addEventListener('dragenter', () => dropZone.classList.add('drag-over'));
+            dropZone.addEventListener('dragover', () => dropZone.classList.add('drag-over'));
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+            dropZone.addEventListener('drop', e => {
+                dropZone.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length && files[0].name.endsWith('.reac')) handleFileLoad(files[0]);
+            });
+
+            function handleFileLoad(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pendingReacContent = e.target.result;
+                    document.getElementById('secretPhraseContainer').style.display = 'block';
+                    document.getElementById('createAccountBtn').style.display = 'none';
+                    document.querySelectorAll('#accountPage > .pixel-input-group').forEach(g => g.style
+                        .display = 'none');
+                    document.getElementById('dropZone').style.display = 'none';
+                    document.getElementById('forgotPhraseBtn').style.display = 'none';
+                    showAlert('File loaded! Enter your secret phrase to decrypt.', false);
+                };
+                reader.onerror = () => showAlert('Error reading file');
+                reader.readAsText(file);
+            }
+
+            document.getElementById('decryptAndLoginBtn').addEventListener('click', async () => {
+                const secret = document.getElementById('loginSecretPhrase').value;
+                if (!secret) return showAlert('Please enter secret phrase');
+                try {
+                    const userData = await decryptReacFile(pendingReacContent, secret);
+                    showAvatarPage(userData);
+                    resetCreateForm();
+                } catch (err) {
+                    console.error(err);
+                    showAlert('Wrong secret phrase! Please try again.');
+                }
+            });
+
+            function resetCreateForm() {
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupUsername').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('signupSecretPhrase').value = '';
+                document.getElementById('signupPhraseHint').value = '';
+                document.getElementById('signupChallengeQuestion').value = '';
+                document.getElementById('signupChallengeAnswer').value = '';
+                document.getElementById('signupAccountType').value = 'personal';
+                document.getElementById('accountTypeSelected').textContent = 'Personal Account';
+                document.getElementById('secretPhraseContainer').style.display = 'none';
+                document.getElementById('dropZone').style.display = '';
+                document.querySelectorAll('#accountPage > .pixel-input-group').forEach(g => g.style.display =
+                    '');
+                document.getElementById('createAccountBtn').style.display = '';
+                document.getElementById('forgotPhraseBtn').style.display = '';
+                document.getElementById('signupAlert').style.display = 'none';
+                updateGmailIcon();
+                pendingReacContent = null;
+                customAvatarUrl = null;
+            }
+
+            // ========== Custom dropdown logic ==========
+            (function initDropdown() {
+                const select = document.getElementById('accountTypeSelect');
+                const selected = document.getElementById('accountTypeSelected');
+                const items = document.getElementById('accountTypeItems');
+                const hidden = document.getElementById('signupAccountType');
+
+                selected.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    items.classList.toggle('open');
+                });
+
+                items.querySelectorAll('div[data-value]').forEach(div => {
+                    div.addEventListener('click', () => {
+                        hidden.value = div.dataset.value;
+                        const text = div.childNodes[div.childNodes.length - 1]?.textContent || div
+                            .textContent;
+                        selected.textContent = text.trim();
+                        items.classList.remove('open');
+                    });
+                });
+
+                document.addEventListener('click', () => items.classList.remove('open'));
+                select.addEventListener('click', (e) => e.stopPropagation());
+            })();
+
+            document.getElementById('createAccountBtn').addEventListener('click', () => {
+                const email = document.getElementById('signupEmail').value.trim();
+                const username = document.getElementById('signupUsername').value.trim();
+                const password = document.getElementById('signupPassword').value.trim();
+                const secret = document.getElementById('signupSecretPhrase').value;
+                const phraseHint = document.getElementById('signupPhraseHint').value.trim();
+                const challengeQuestion = document.getElementById('signupChallengeQuestion').value.trim();
+                const challengeAnswer = document.getElementById('signupChallengeAnswer').value.trim();
+                const accountType = document.getElementById('signupAccountType').value;
+
+                if (!email || !username || !password || !secret) return showAlert(
+                    'FILL ALL REQUIRED FIELDS');
+                if (!validateEmail(email)) return showAlert('INVALID EMAIL');
+                if (!isGmail(email)) return showAlert('ONLY GMAIL ALLOWED');
+                if (username.length < 3) return showAlert('USERNAME TOO SHORT');
+                if (password.length < 4) return showAlert('PASSWORD TOO SHORT');
+                if (secret.length < 8) return showAlert('SECRET PHRASE TOO SHORT (8+)');
+                if (!phraseHint) return showAlert('PHRASE HINT REQUIRED');
+                if (!challengeQuestion || !challengeAnswer) return showAlert('CHALLENGE Q&A REQUIRED');
+
+                const userData = {
+                    user_id: crypto.randomUUID(),
+                    email,
+                    username,
+                    password,
+                    avatar: DEFAULT_AVATAR_SVG,
+                    customAvatar: null,
+                    phraseHint,
+                    challengeQuestion,
+                    challengeAnswer,
+                    accountType,
+                    createdAt: new Date().toISOString()
+                };
+
+                showAvatarPage(userData);
+                resetCreateForm();
+            });
+
+            // ========== Upload Custom Avatar ==========
+            const customAvatarInput = document.getElementById('customAvatarInput');
+            document.getElementById('uploadAvatarBtn').addEventListener('click', () => {
+                customAvatarInput.click();
+            });
+            customAvatarInput.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    customAvatarInput.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    customAvatarUrl = ev.target.result;
+                    currentAvatar = customAvatarUrl;
+                    currentUser.avatar = customAvatarUrl;
+                    currentUser.customAvatar = customAvatarUrl;
+                    updateWelcomeUser();
+                    renderAvatarGrid();
+                };
+                reader.readAsDataURL(file);
+                customAvatarInput.value = '';
+            };
+
+            document.getElementById('deleteAvatarBtn').addEventListener('click', () => {
+                deleteAvatar();
+            });
+
+            document.getElementById('saveAccountBtn').addEventListener('click', async () => {
+                if (!currentUser) return;
+                const secret = prompt('Enter your secret phrase to save:');
+                if (!secret) return;
+                try {
+                    const reacContent = await createReacFile(currentUser, secret);
+                    const blob = new Blob([reacContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `restudio_${currentUser.username}.reac`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    document.getElementById('successModal').style.display = 'flex';
+                } catch (err) {
+                    showAlert('Error: ' + err.message);
+                }
+            });
+
+            document.getElementById('closeSuccessModal').addEventListener('click', () => {
+                document.getElementById('successModal').style.display = 'none';
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                currentUser = null;
+                currentAvatar = null;
+                pendingReacContent = null;
+                customAvatarUrl = null;
+                document.getElementById('avatarPage').style.display = 'none';
+                document.getElementById('accountPage').style.display = '';
+                resetCreateForm();
+            });
+
+            document.getElementById('signupEmail').addEventListener('input', updateGmailIcon);
+            updateGmailIcon();
+
+            // ========== FORGOT PHRASE RECOVERY - TWO-STEP FLOW WITH DIRECT LOGIN ==========
+            const forgotModal = document.getElementById('forgotModal');
+            const forgotDropZone = document.getElementById('forgotDropZone');
+            const forgotFileInput = document.getElementById('forgotFileInput');
+            const forgotChallengeSection = document.getElementById('forgotChallengeSection');
+            const forgotChallengeLabel = document.getElementById('forgotChallengeLabel');
+            const forgotChallengeAnswer = document.getElementById('forgotChallengeAnswer');
+            const forgotAttemptsText = document.getElementById('forgotAttemptsText');
+            const forgotTimerText = document.getElementById('forgotTimerText');
+            const forgotHintDisplay = document.getElementById('forgotHintDisplay');
+            const forgotSubmitAnswer = document.getElementById('forgotSubmitAnswer');
+            const forgotStageInfo = document.getElementById('forgotStageInfo');
+            const forgotLoginSection = document.getElementById('forgotLoginSection');
+            const forgotLoginPhrase = document.getElementById('forgotLoginPhrase');
+            const forgotLoginBtn = document.getElementById('forgotLoginBtn');
+
+            function resetForgotState() {
+                forgotAttempts = MAX_ATTEMPTS;
+                forgotLockedUntil = null;
+                forgotPendingFile = null;
+                forgotPendingUserData = null;
+                forgotStage = 'decrypt';
+                forgotHintDisplay.style.display = 'none';
+                forgotHintDisplay.textContent = '';
+                forgotChallengeSection.style.display = 'none';
+                forgotChallengeAnswer.value = '';
+                forgotChallengeAnswer.placeholder = '';
+                forgotChallengeAnswer.disabled = false;
+                forgotChallengeLabel.textContent = '';
+                forgotAttemptsText.textContent = `Attempts remaining: ${MAX_ATTEMPTS}`;
+                forgotTimerText.style.display = 'none';
+                forgotTimerText.textContent = '';
+                forgotSubmitAnswer.disabled = false;
+                forgotSubmitAnswer.textContent = 'CHECK ANSWER';
+                forgotSubmitAnswer.className = 'modal-btn';
+                forgotSubmitAnswer.style.display = '';
+                forgotDropZone.style.display = '';
+                forgotStageInfo.style.display = 'none';
+                forgotStageInfo.textContent = '';
+                forgotLoginSection.style.display = 'none';
+                forgotLoginPhrase.value = '';
+                if (forgotTimerInterval) { clearInterval(forgotTimerInterval);
+                    forgotTimerInterval = null; }
+            }
+
+            function startLockoutTimer() {
+                forgotSubmitAnswer.disabled = true;
+                forgotTimerText.style.display = 'block';
+                const updateTimer = () => {
+                    if (!forgotLockedUntil) return;
+                    const remaining = Math.ceil((forgotLockedUntil - Date.now()) / 1000);
+                    if (remaining <= 0) {
+                        clearInterval(forgotTimerInterval);
+                        forgotTimerInterval = null;
+                        forgotAttempts = MAX_ATTEMPTS;
+                        forgotLockedUntil = null;
+                        forgotSubmitAnswer.disabled = false;
+                        forgotTimerText.style.display = 'none';
+                        forgotAttemptsText.textContent = `Attempts remaining: ${MAX_ATTEMPTS}`;
+                        forgotStage = 'decrypt';
+                        forgotPendingUserData = null;
+                        forgotChallengeSection.style.display = 'none';
+                        forgotDropZone.style.display = '';
+                        forgotStageInfo.style.display = 'none';
+                        forgotChallengeAnswer.value = '';
+                        forgotChallengeLabel.textContent = '';
+                        forgotSubmitAnswer.textContent = 'CHECK ANSWER';
+                        forgotSubmitAnswer.className = 'modal-btn';
+                        forgotSubmitAnswer.style.display = '';
+                        forgotLoginSection.style.display = 'none';
+                        forgotLoginPhrase.value = '';
+                        forgotChallengeAnswer.disabled = false;
+                        return;
+                    }
+                    const mins = Math.floor(remaining / 60);
+                    const secs = remaining % 60;
+                    forgotTimerText.textContent =
+                        `LOCKED: ${mins}:${secs.toString().padStart(2, '0')} remaining`;
+                };
+                updateTimer();
+                if (forgotTimerInterval) clearInterval(forgotTimerInterval);
+                forgotTimerInterval = setInterval(updateTimer, 1000);
+            }
+
+            document.getElementById('forgotPhraseBtn').addEventListener('click', () => {
+                resetForgotState();
+                forgotModal.style.display = 'flex';
+            });
+
+            document.getElementById('closeForgotModal').addEventListener('click', () => {
+                forgotModal.style.display = 'none';
+                resetForgotState();
+            });
+
+            forgotDropZone.onclick = () => forgotFileInput.click();
+            forgotFileInput.onchange = e => { if (e.target.files[0]) handleForgotFileLoad(e.target.files[
+                    0]);
+                forgotFileInput.value = ''; };
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
+                forgotDropZone.addEventListener(ev, e => { e.preventDefault();
+                    e.stopPropagation(); });
+            });
+            forgotDropZone.addEventListener('dragenter', () => forgotDropZone.classList.add('drag-over'));
+            forgotDropZone.addEventListener('dragover', () => forgotDropZone.classList.add('drag-over'));
+            forgotDropZone.addEventListener('dragleave', () => forgotDropZone.classList.remove(
+            'drag-over'));
+            forgotDropZone.addEventListener('drop', e => {
+                forgotDropZone.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length && files[0].name.endsWith('.reac')) handleForgotFileLoad(files[0]);
+            });
+
+            function handleForgotFileLoad(file) {
+                if (forgotLockedUntil && Date.now() < forgotLockedUntil) {
+                    alert('Account locked. Please wait.');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    forgotPendingFile = e.target.result;
+                    try {
+                        const fileObj = JSON.parse(forgotPendingFile);
+                        if (!fileObj.salt || !fileObj.iv || !fileObj.data) throw new Error(
+                            'Invalid file');
+                        forgotPendingUserData = null;
+                        forgotStage = 'decrypt';
+                        forgotChallengeSection.style.display = 'block';
+                        forgotDropZone.style.display = 'none';
+                        forgotStageInfo.style.display = 'block';
+                        forgotStageInfo.textContent = 'STEP 1: Enter your SECRET PHRASE to decrypt';
+                        forgotChallengeLabel.textContent = 'YOUR SECRET PHRASE:';
+                        forgotChallengeAnswer.placeholder = 'Enter your secret phrase...';
+                        forgotChallengeAnswer.value = '';
+                        forgotChallengeAnswer.disabled = false;
+                        forgotHintDisplay.style.display = 'none';
+                        forgotAttemptsText.textContent = `Attempts remaining: ${forgotAttempts}`;
+                        forgotSubmitAnswer.disabled = false;
+                        forgotSubmitAnswer.textContent = 'DECRYPT';
+                        forgotSubmitAnswer.className = 'modal-btn';
+                        forgotSubmitAnswer.style.display = '';
+                        forgotLoginSection.style.display = 'none';
+                        forgotLoginPhrase.value = '';
+                    } catch (err) {
+                        alert('Invalid .REAC file format.');
+                        forgotPendingFile = null;
+                    }
+                };
+                reader.onerror = () => alert('Error reading file');
+                reader.readAsText(file);
+            }
+
+            // Handle forgot submit button click
+            forgotSubmitAnswer.addEventListener('click', async () => {
+                if (forgotLockedUntil && Date.now() < forgotLockedUntil) return;
+                if (!forgotPendingFile) return;
+
+                // If DONE state, reset everything
+                if (forgotSubmitAnswer.textContent === 'DONE') {
+                    resetForgotState();
+                    forgotChallengeSection.style.display = 'none';
+                    forgotDropZone.style.display = '';
+                    forgotStageInfo.style.display = 'none';
+                    forgotLoginSection.style.display = 'none';
+                    return;
+                }
+
+                const answer = forgotChallengeAnswer.value.trim();
+                if (!answer) return;
+
+                // ========== STEP 1: Decrypt with secret phrase ==========
+                if (forgotStage === 'decrypt') {
+                    try {
+                        const userData = await decryptReacFilePartial(forgotPendingFile, answer);
+                        forgotPendingUserData = userData;
+                        forgotStage = 'challenge';
+                        forgotStageInfo.textContent =
+                            'Decrypted! STEP 2: Answer your challenge question';
+                        forgotChallengeLabel.textContent = 'CHALLENGE: ' + userData.challengeQuestion;
+                        forgotChallengeAnswer.placeholder = 'Enter your challenge answer...';
+                        forgotChallengeAnswer.value = '';
+                        forgotHintDisplay.style.display = 'none';
+                        forgotSubmitAnswer.textContent = 'CHECK ANSWER';
+                        forgotSubmitAnswer.className = 'modal-btn';
+                        forgotAttemptsText.textContent = `Attempts remaining: ${forgotAttempts}`;
+                        forgotLoginSection.style.display = 'none';
+                    } catch (err) {
+                        forgotAttempts--;
+                        forgotAttemptsText.textContent = `Attempts remaining: ${forgotAttempts}`;
+                        forgotChallengeAnswer.value = '';
+                        if (forgotAttempts <= 0) {
+                            forgotLockedUntil = Date.now() + (LOCKOUT_SECONDS * 1000);
+                            forgotAttemptsText.textContent = '0 attempts — LOCKED';
+                            startLockoutTimer();
+                        }
+                    }
+                    return;
+                }
+
+                // ========== STEP 2: Check challenge answer ==========
+                if (forgotStage === 'challenge') {
+                    if (!forgotPendingUserData) {
+                        resetForgotState();
+                        forgotChallengeSection.style.display = 'none';
+                        forgotDropZone.style.display = '';
+                        forgotStageInfo.style.display = 'none';
+                        forgotLoginSection.style.display = 'none';
+                        return;
+                    }
+
+                    if (forgotPendingUserData.challengeAnswer === answer) {
+                        forgotAttempts = MAX_ATTEMPTS;
+                        forgotAttemptsText.textContent = `Attempts remaining: ${MAX_ATTEMPTS}`;
+                        forgotHintDisplay.style.display = 'block';
+                        forgotHintDisplay.textContent =
+                            `YOUR PHRASE HINT: ${forgotPendingUserData.phraseHint}`;
+                        forgotSubmitAnswer.textContent = 'DONE';
+                        forgotSubmitAnswer.className = 'modal-btn done-btn';
+                        forgotSubmitAnswer.disabled = false;
+                        forgotStageInfo.textContent =
+                            'Hint revealed! Enter your phrase below to login directly.';
+                        forgotChallengeAnswer.value = '';
+                        forgotChallengeAnswer.disabled = true;
+                        // Show login section
+                        forgotLoginSection.style.display = 'block';
+                        forgotLoginPhrase.value = '';
+                        forgotLoginPhrase.focus();
+                    } else {
+                        forgotAttempts--;
+                        forgotAttemptsText.textContent = `Attempts remaining: ${forgotAttempts}`;
+                        forgotChallengeAnswer.value = '';
+                        if (forgotAttempts <= 0) {
+                            forgotLockedUntil = Date.now() + (LOCKOUT_SECONDS * 1000);
+                            forgotAttemptsText.textContent = '0 attempts — LOCKED';
+                            startLockoutTimer();
+                        }
+                    }
+                }
+            });
+
+            // Direct login after recovery
+            forgotLoginBtn.addEventListener('click', async () => {
+                const secretPhrase = forgotLoginPhrase.value.trim();
+                if (!secretPhrase) {
+                    alert('Please enter your secret phrase');
+                    return;
+                }
+                if (!forgotPendingFile) {
+                    alert('No file loaded');
+                    return;
+                }
+                try {
+                    const userData = await decryptReacFile(forgotPendingFile, secretPhrase);
+                    // Close modal and login
+                    forgotModal.style.display = 'none';
+                    resetForgotState();
+                    showAvatarPage(userData);
+                } catch (err) {
+                    alert('Wrong secret phrase! Please try again.');
+                    forgotLoginPhrase.value = '';
+                }
+            });
+
+            // Allow Enter key to submit login
+            forgotLoginPhrase.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    forgotLoginBtn.click();
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>
